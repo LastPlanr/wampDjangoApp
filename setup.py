@@ -3,9 +3,9 @@ try:
 except ImportError:
     from distutils.core import setup
 
-version = '0.1.0'
+version = '0.1.1'
 
-with open('requirements.txt') as requirements_file:
+with open('requirements/production.txt') as requirements_file:
     requires = [item for item in requirements_file]
 
 with open('LICENSE') as f:
