@@ -12,6 +12,10 @@ class BaseCommand(DjangoBaseCommand, WampApp):
     models = {}
     apps = {}
 
+    def __init__(self, *args, **kwargs):
+        DjangoBaseCommand.__init__(self, *args, **kwargs)
+        WampApp.__init__(self)
+
     @classmethod
     def get_app_config(cls, app_name):
         try:
