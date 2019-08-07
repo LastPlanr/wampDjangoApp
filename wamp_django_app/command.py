@@ -4,17 +4,13 @@ from django.apps import apps
 from django.db import transaction
 from django.core.management.base import BaseCommand as DjangoBaseCommand
 
-from wampbaseapp.wamp_app import WampApp, register_method
+from wampbaseapp.wamp_app import WampApp as WampBaseApp, register_method
 
 
-class BaseCommand(DjangoBaseCommand, WampApp):
+class WampApp(WampBaseApp):
     PRINCIPAL = 'PRINCIPAL'
     models = {}
     apps = {}
-
-    def __init__(self, *args, **kwargs):
-        DjangoBaseCommand.__init__(self, *args, **kwargs)
-        WampApp.__init__(self)
 
     @classmethod
     def get_app_config(cls, app_name):
@@ -105,3 +101,11 @@ class BaseCommand(DjangoBaseCommand, WampApp):
         queryset = model.objects.filter(**search_params)
         queryset.update(**data)
         return queryset.count()
+
+
+class Command(DjangoBaseCommand):
+    def wamp_run(self):
+        WampApp.run()
+
+    def handle(self, *args, **kwargs):
+        self.wamp_run()
