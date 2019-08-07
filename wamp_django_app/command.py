@@ -103,8 +103,11 @@ class WampApp(WampBaseApp):
         return queryset.count()
 
 
-class Command(DjangoBaseCommand):
+class Command(DjangoBaseCommand, WampApp):
+    PRINCIPAL = 'PRINCIPAL'
+
     def wamp_run(self):
+        WampApp.PRINCIPAL = self.PRINCIPAL
         WampApp.run()
 
     def handle(self, *args, **kwargs):
