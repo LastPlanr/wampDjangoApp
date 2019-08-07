@@ -4,7 +4,7 @@ from django.apps import apps
 from django.db import transaction
 from django.core.management.base import BaseCommand as DjangoBaseCommand
 
-from kbaseapp.wamp_app import WampApp, register_method
+from wampbaseapp.wamp_app import WampApp, register_method
 
 
 class BaseCommand(DjangoBaseCommand, WampApp):
