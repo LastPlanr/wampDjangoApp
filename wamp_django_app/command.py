@@ -41,10 +41,8 @@ class WampApp(WampBaseApp):
 
         def decorate(method):
             async def new_method(model_path, *args, **kwargs):
-                print('new_method:', model_path, args, kwargs)
 
                 def sync_method(model_path, *args, **kwargs):
-                    print('sync_method:', self, model_path, args, kwargs, ':', method.__name__)
                     model = self.get_model(model_path)
                     return method(model, *args, **kwargs)
 
@@ -57,8 +55,6 @@ class WampApp(WampBaseApp):
             new_method = decorate(method)
             new_methods_map[method_name] = (new_method, options)
         self.methods = new_methods_map
-
-        print('methods:', new_methods_map)
 
     @register_method('get')
     def get(self, model, search_params):
@@ -110,12 +106,6 @@ class WampApp(WampBaseApp):
         queryset = model.objects.filter(**search_params)
         queryset.update(**data)
         return queryset.count()
-
-    async def afterJoin(self):
-        print('afterJoin:', self.loop.is_running(), self.loop.is_closed())
-
-    async def process_parallel_queue(self):
-        pass
 
 
 class Command(DjangoBaseCommand, WampApp):
