@@ -81,6 +81,11 @@ class WampApp(WampBaseApp):
         obj, created = model.objects.get_or_insert(**data)
         return obj.serialize(), created
 
+    @register_method('update_or_create')
+    def update_or_create(self, model, data, defaults={}):
+        obj, created = model.objects.update_or_create(**data, defaults=defaults)
+        return obj.serialize(), created
+
     @register_method('delete')
     def delete(self, model, search_params):
         return model.objects.filter(**search_params).delete()

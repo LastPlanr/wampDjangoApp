@@ -3,7 +3,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-version = '0.3.9'
+version = '0.3.10'
 
 requires = []
 
