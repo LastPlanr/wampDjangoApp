@@ -38,7 +38,7 @@ class WampApp(WampBaseApp):
 
     def post_init(self):
         new_methods_map = {}
-        for method_name, method_data in self.methods.values():
+        for method_name, method_data in self.methods.items():
             method, options = method_data
 
             def sync_method(instance, model_path, *args, **kwargs):
