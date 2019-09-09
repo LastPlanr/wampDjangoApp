@@ -105,9 +105,13 @@ class WampApp(WampBaseApp):
 
 class Command(DjangoBaseCommand, WampApp):
     PRINCIPAL = 'PRINCIPAL'
+    METHODS_PREFIX = ''
+    METHODS_SUFFIX = ''
 
     def wamp_run(self):
         WampApp.PRINCIPAL = self.PRINCIPAL
+        WampApp.METHODS_PREFIX = self.METHODS_PREFIX
+        WampApp.METHODS_SUFFIX = self.METHODS_SUFFIX
         WampApp.run()
 
     def handle(self, *args, **kwargs):
