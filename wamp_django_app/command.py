@@ -61,6 +61,11 @@ class WampApp(WampBaseApp):
         obj = model.objects.get(**search_params)
         return obj.serialize()
 
+    @register_method('filter')
+    def filter(self, model, search_params):
+        obj = model.objects.filter(**search_params)
+        return obj.serialize()
+
     @register_method('get_or_create')
     def get_or_create(self, model, data):
         obj, created = model.objects.get_or_create(**data)
