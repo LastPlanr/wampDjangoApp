@@ -59,22 +59,22 @@ class WampApp(WampBaseApp):
     @register_method('get')
     def get(self, model, search_params):
         obj = model.objects.get(**search_params)
-        return obj.to_dict()
+        return obj.serialize()
 
     @register_method('get_or_create')
     def get_or_create(self, model, data):
         obj, created = model.objects.get_or_create(**data)
-        return obj.to_dict(), created
+        return obj.serialize(), created
 
     @register_method('create')
     def create(self, model, data):
         obj = model.objects.create(**data)
-        return obj.to_dict()
+        return obj.serialize()
 
     @register_method('get_or_insert')
     def get_or_insert(self, model, data):
         obj, created = model.objects.get_or_insert(**data)
-        return obj.to_dict(), created
+        return obj.serialize(), created
 
     @register_method('delete')
     def delete(self, model, search_params):
