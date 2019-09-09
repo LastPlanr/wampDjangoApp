@@ -67,8 +67,8 @@ class WampApp(WampBaseApp):
         return [obj.serialize() for obj in objects]
 
     @register_method('get_or_create')
-    def get_or_create(self, model, data):
-        obj, created = model.objects.get_or_create(**data)
+    def get_or_create(self, model, data, defaults={}):
+        obj, created = model.objects.get_or_create(**data, defaults=defaults)
         return obj.serialize(), created
 
     @register_method('create')
