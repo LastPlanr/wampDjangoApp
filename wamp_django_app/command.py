@@ -38,18 +38,27 @@ class WampApp(WampBaseApp):
 
     def post_init(self):
         new_methods_map = {}
+
+        def decorate(method):
+            async def new_method(model_path, *args, **kwargs):
+                print('new_method:', model_path, args, kwargs)
+
+                def sync_method(model_path, *args, **kwargs):
+                    print('sync_method:', self, model_path, args, kwargs, ':', method.__name__)
+                    model = self.get_model(model_path)
+                    return method(model, *args, **kwargs)
+
+                return await self.async_run(sync_method, model_path, *args, **kwargs)
+
+            return new_method
+
         for method_name, method_data in self.methods.items():
             method, options = method_data
-
-            def sync_method(instance, model_path, *args, **kwargs):
-                model = instance.get_model(model_path)
-                return method(model, *args, **kwargs)
-
-            async def new_method(instance, model_path, *args, **kwargs):
-                return await instance.async_run(sync_method, model_path, *args, **kwargs)
-
+            new_method = decorate(method)
             new_methods_map[method_name] = (new_method, options)
         self.methods = new_methods_map
+
+        print('methods:', new_methods_map)
 
     @register_method('get')
     def get(self, model, search_params):
@@ -102,6 +111,12 @@ class WampApp(WampBaseApp):
         queryset.update(**data)
         return queryset.count()
 
+    async def afterJoin(self):
+        print('afterJoin:', self.loop.is_running(), self.loop.is_closed())
+
+    async def process_parallel_queue(self):
+        pass
+
 
 class Command(DjangoBaseCommand, WampApp):
     PRINCIPAL = 'PRINCIPAL'
@@ -112,6 +127,7 @@ class Command(DjangoBaseCommand, WampApp):
         WampApp.PRINCIPAL = self.PRINCIPAL
         WampApp.METHODS_PREFIX = self.METHODS_PREFIX
         WampApp.METHODS_SUFFIX = self.METHODS_SUFFIX
+
         WampApp.run()
 
     def handle(self, *args, **kwargs):
