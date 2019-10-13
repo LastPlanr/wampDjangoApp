@@ -3,7 +3,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-version = '0.3.10'
+version = '0.4.0'
 
 requires = []
 
@@ -19,7 +19,7 @@ setup(
     author_email='contato@cleber.solutions',
     url='https://github.com/cleber-solutions/wampDjangoApp',
     license=license,
-    packages=['wamp_django_app'],
+    packages=['wamp_django_app', 'wamp_django_app.management.commands'],
     package_data={'': ['README.md']},
     include_package_data=True,
     install_requires=requires,
